@@ -187,7 +187,7 @@ body#arrivees div#wrapper {
                     display: block;
                     margin: 0.15em 1.50em 0 calc(9.5em - .50rem);
                     width: calc(100vw - 11.5em);
-                    
+
                     ul.calls {
                         display: block;
                         margin: 0;
@@ -317,3 +317,6 @@ body#arrivees div#wrapper {
 // scss imports
 @import "./departs";
 @import "./arrivees";
+
+// greyscale overrides
+@import "./ecran-greyscale";

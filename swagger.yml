@@ -4,6 +4,66 @@ info:
   title: "tiger API"
   version: 2.0.1
 paths:
+  /bus/uk/citybus/locations:
+    get:
+      operationId: "listCitybusLocations"
+      parameters:
+        - description: "Search Longitude & Latitude"
+          name: "location"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+      summary: "Get all available West of England stops"
+      x-mojo-name: "list_citybus_locations"
+      x-mojo-to: "API::Bus::UK::Citybus::Locations#list"
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: "object"
+          description: "Plymouth Citybus locations response"
+  /bus/uk/citybus/services/{stop_id}:
+    get:
+      operationId: "getCitybusServices"
+      parameters:
+        - description: "Internal stop identifier"
+          name: "stop_id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      summary: "Get data from Plymouth Citybus services based on stop id"
+      x-mojo-name: "get_citybus_services"
+      x-mojo-to: "API::Bus::UK::Citybus::Services#get"
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: "object"
+          description: "Plymouth Citybus services response"
+  /bus/uk/citybus/services/{stop_id}/updates:
+    get:
+      operationId: "getCityBusServicesUpdates"
+      parameters:
+        - description: "Internal stop identifier"
+          name: "stop_id"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      summary: "Get updates from Plymouth Citybus Services based on stop code"
+      x-mojo-name: "get_citybus_services_updates"
+      x-mojo-to: "API::Bus::UK::Citybus::Services#updates"
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: "object"
+          description: "Plymouth Citybus Services Updates response"
   /bus/uk/woe/locations:
     get:
       operationId: "listWoELocations"

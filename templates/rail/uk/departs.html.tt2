@@ -49,7 +49,6 @@
         tiplocId: '[% tiploc_id %]',
         api: api,
         jquery: jQuery,
-        disableAnimation: [% IF (disable_animation) %]true[% ELSE %]false[% END %],
         hideCalls: [% IF (hide_calls) %]true[% ELSE %]false[% END %],
     });
     ukrail.init();

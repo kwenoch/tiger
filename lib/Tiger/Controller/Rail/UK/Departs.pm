@@ -27,21 +27,19 @@ sub departs {
 
     my $tiplocId = $controller->param('tiploc_id') or return;
 
-    my $disableAnimation = ( $controller->param('disable_animation') ) ? 1           : undef;
-    my $greyscale        = ( $controller->param('greyscale') )         ? 'greyscale' : undef;
-    my $hideCalls        = ( $controller->param('hide_calls') )        ? 1           : undef;
-    my $hideSecs         = ( $controller->param('hide_secs') )         ? 1           : undef;
+    my $greyscale    = ( $controller->param('greyscale') )     ? 'greyscale' : undef;
+    my $hideCalls    = ( $controller->param('hide_calls') )    ? 1           : undef;
+    my $hideSecs     = ( $controller->param('hide_secs') )     ? 1           : undef;
 
     ## render the template
     return $controller->render(
-        disable_animation => $disableAnimation,
-        greyscale         => $greyscale,
-        hide_calls        => $hideCalls,
-        hide_secs         => $hideSecs,
-        tiploc_id         => $tiplocId,
-        title             => 'Departures from ' . $tiplocId,
-        template          => 'rail/uk/departs',
-        handler           => 'tt2',
+        greyscale     => $greyscale,
+        hide_calls    => $hideCalls,
+        hide_secs     => $hideSecs,
+        tiploc_id     => $tiplocId,
+        title         => 'Departures from ' . $tiplocId,
+        template      => 'rail/uk/departs',
+        handler       => 'tt2',
     );
 }
 

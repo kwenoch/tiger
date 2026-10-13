@@ -1,0 +1,98 @@
+//  This file is part of tiger
+//
+//  Copyright 2025 PerplexedTheta
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+
+body#departs.greyscale div#wrapper,
+body#arrivees.greyscale div#wrapper {
+    filter: grayscale(100%);
+
+    background: var(--white);
+    color: var(--black);
+
+    div#loading {
+        background: var(--white);
+        color: var(--black);
+
+        span.dialogue {
+            border-color: var(--black);
+        }
+    }
+
+    header {
+        background: var(--white);
+        color: var(--black);
+    }
+
+    main {
+        color: var(--black);
+
+        &::before {
+            mix-blend-mode: darken;
+        }
+
+        div.row {
+            background: var(--lightgrey);
+
+            &:nth-child(odd) {
+                background: var(--white);
+            }
+
+            div.col {
+                &.opinfo span.oper img {
+                    filter: brightness(0);
+                }
+
+                &.boardinfo span.due,
+                &.schedinfo span.status,
+                &.schedinfo span.addinfo {
+                    color: var(--black);
+                }
+
+                &.callsinfo ul.calls {
+                    li {
+                        &::before {
+                            color: var(--black);
+                        }
+                    }
+                }
+    
+                &.lineinfo span.line,
+                &.platinfo span.platform {
+                    color: var(--black);
+                    border-color: var(--black);
+
+                    &.alert {
+                        background: var(--white) repeating-linear-gradient(45deg, transparent, transparent 3px,  3px, var(--lightgrey) 6px);
+                        background-size: cover;
+                    }
+                }
+            }
+        }
+    }
+
+    footer {
+        background: var(--white);
+        color: var(--black);
+
+        div#clock {
+            background: var(--white);
+            border-color: var(--black);
+
+            small {
+                color: var(--darkgrey);
+            }
+        }
+    }
+}

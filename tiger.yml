@@ -4,6 +4,10 @@ secrets:
 config:
   v1:
     bus:
+      citybus:
+        api:
+          upstream_api_url:
+            v1: 'https://www.plymouthbus.co.uk'
       woe:
         api:
           upstream_api_url:

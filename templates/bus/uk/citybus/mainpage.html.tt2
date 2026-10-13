@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+[%
+  INCLUDE 'include/doc-head-copyright.inc.tt2'
+  author_year='2025'
+  author_name='PerplexedTheta'
+%]
+[%
+  INCLUDE 'include/doc-head-start.inc.tt2'
+  title="$title"
+  use_bootstrap="1"
+%]
+[%
+  INCLUDE 'include/doc-head-close.inc.tt2'
+  id="plymcitybus"
+  class=""
+%]
+
+<nav class="navbar navbar-dark bg-primary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">PerplexedTheta's TIGER</a>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<main class="flex-shrink-0 pt-3">
+    <div class="container-fluid">
+        <h1 class="text-center fw-bold">Select an option</h1>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span id="search-postcode-label" class="input-group-text">Search postcode:</span>
+            </div>
+            <input name="search-postcode-input" type="text" class="form-control" aria-label="Set lattitude" aria-describedby="search-postcode-label" disabled="disabled">
+        </div>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span id="filter-label" class="input-group-text">Filter by</span>
+            </div>
+            <input name="filter-input" type="text" class="form-control" aria-label="Filter by" aria-describedby="filter-label" disabled="disabled">
+        </div>
+        <input type="hidden" name="search-lat-input" value="[% lat %]" />
+        <input type="hidden" name="search-long-input" value="[% long %]" />
+        <ul class="list-group text-center"></ul>
+    </div>
+</main>
+
+<footer class="footer mt-auto py-3">
+    <div class="container-fluid d-flex justify-content-end font-monospace">
+        <div id="clock">
+            <span>00 00</span>
+            <small>00</small>
+        </div>
+    </div>
+</footer>
+
+[% INCLUDE 'include/doc-body-scripts.inc.tt2' %]
+<script type="module">
+    import API from '/include/js/bus/uk/citybus/citybus-api.mjs';
+    import Clock from '/include/js/clock.mjs';
+    import Postcode from '/include/js/postcode.mjs';
+    import Locations from '/include/js/bus/uk/citybus/locations.mjs';
+
+    const api = new API({ jquery: jQuery });
+    api.init();
+
+    const postcode = new Postcode({ jquery: jQuery });
+    postcode.init();
+
+    const clock = new Clock({ jquery: jQuery });
+    clock.init();
+
+    const locations = new Locations({ api: api, postcode: postcode, jquery: jQuery });
+    locations.init();
+</script>
+[% INCLUDE 'include/doc-body-close.inc.tt2' %]

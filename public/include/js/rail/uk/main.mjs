@@ -21,7 +21,6 @@ const UKRail = class {
         this.api = config.api;
         this.jQuery = config.jquery;
 
-        this.disableAnimation = config.disableAnimation || false;
         this.hideCalls = config.hideCalls || false;
 
         if (this.mode == undefined)
@@ -132,7 +131,6 @@ const UKRail = class {
                             this.setCalls(
                                 row,
                                 service.CallingPoints.Front,
-                                this.disableAnimation,
                             );
                     }
 
@@ -227,15 +225,13 @@ const UKRail = class {
             .html(delay + " minutes");
     };
 
-    setCalls = (row, callingPoints = [], disableAnimation = false) => {
+    setCalls = (row, callingPoints = []) => {
         callingPoints.forEach((callingPoint) => {
             row.find("ul.calls")
                 .first()
-                .append("<li>" + callingPoint.Name + "</li>");
+                .append("<li>" + callingPoint.Name + "</li>")
+                .addClass("animated");;
         });
-
-        if (!disableAnimation)
-            row.find("ul.calls").first().addClass("animated");
 
         return row.find("ul.calls").first();
     };
@@ -290,6 +286,9 @@ const UKRail = class {
         if (oper == "SR")
             oper =
                 '<img src=\"\/res\/vectors\/scot.svg\" style=\"width:2.25em\" alt=\"ScotRail\" \/>';
+        if (oper == "TfL")
+            oper =
+                '<img src=\"\/res\/vectors\/tfl.svg\" style=\"width:2.25em\" alt=\"TfL\" \/>';
 
         return row.find("span.oper").first().html(oper);
     };

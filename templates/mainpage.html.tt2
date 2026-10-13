@@ -42,6 +42,9 @@
             <li class="list-group-item">
                 <a href="/bus/uk/woe">West of England Bus</a>
             </li>
+            <li class="list-group-item">
+                <a href="/bus/uk/citybus">Plymouth CityBus Bus</a>
+            </li>
         </ul>
     </div>
 </main>

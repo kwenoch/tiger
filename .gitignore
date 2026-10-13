@@ -1,4 +1,5 @@
 local/
 node_modules/
 .env
+cpanfile.snapshot
 package-lock.json

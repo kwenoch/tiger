@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+[%
+  INCLUDE 'include/doc-head-copyright.inc.tt2'
+  author_year='2025'
+  author_name='PerplexedTheta'
+%]
+[% INCLUDE 'include/doc-head-start.inc.tt2' %]
+<base href="/">
+[%
+  INCLUDE 'include/doc-head-close.inc.tt2'
+  id="departs"
+  class="$greyscale"
+%]
+
+<div id="loading">
+    <span class="dialogue">Loading . . . </span>
+</div>
+
+<header>
+    <h1>&nbsp;</h1>
+</header>
+
+<main></main>
+
+<footer>
+    <div id="incident">
+        <p>&nbsp;</p>
+    </div>
+    <div id="clock">
+        <span>00 00</span>
+        <small>00</small>
+    </div>
+</footer>
+
+[% INCLUDE 'include/doc-body-scripts.inc.tt2' %]
+<script type="module">
+    import API from './include/js/bus/uk/citybus/citybus-api.mjs';
+    import Clock from './include/js/clock.mjs';
+    import Bus from './include/js/bus/uk/citybus/main.mjs';
+
+    const api = new API({ jquery: jQuery });
+    api.init();
+
+    const clock = new Clock({ jquery: jQuery, hideSecs: [% IF (hide_secs) %]true[% ELSE %]false[% END %] });
+    clock.init();
+
+    const bus = new Bus({ mode: 'departs', stopId: '[% stop_id %]', api: api, jquery: jQuery });
+    bus.init();
+    setInterval(
+        (() => {
+            return bus.build();
+        }),
+        30000
+    );
+</script>
+[% INCLUDE 'include/doc-body-close.inc.tt2' %]

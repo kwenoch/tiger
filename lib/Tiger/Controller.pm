@@ -60,6 +60,21 @@ sub routes {
         controller => 'Controller::Errors',
         action     => 'forbidden',
     );
+    $r->get('/bus/uk/citybus')->to(
+        namespace  => 'Tiger',
+        controller => 'Controller::Bus::UK::CityBus::Mainpage',
+        action     => 'mainpage',
+    );
+    $r->get('/bus/uk/citybus/:stop_id/arrivees')->to(
+        namespace  => 'Tiger',
+        controller => 'Controller::Bus::UK::CityBus::Arrivees',
+        action     => 'arrivees',
+    );
+    $r->get('/bus/uk/citybus/:stop_id/departs')->to(
+        namespace  => 'Tiger',
+        controller => 'Controller::Bus::UK::CityBus::Departs',
+        action     => 'departs',
+    );
     $r->get('/bus/uk/woe')->to(
         namespace  => 'Tiger',
         controller => 'Controller::Bus::UK::WoE::Mainpage',
