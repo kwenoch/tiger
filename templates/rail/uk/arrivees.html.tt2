@@ -17,22 +17,43 @@
 </div>
 
 <header>
-    <h1>&nbsp;</h1>
+    <div id="header-left">
+        <img src="./res/vectors/br.svg" />
+        <h1>&nbsp;</h1>
+    </div>
+    <div id="clock">
+        <span>00 00</span>
+        <small>00</small>
+    </div>
 </header>
 
 <main></main>
 
-<footer></footer>
+<footer>
+    <div id="incident">
+        <p>&nbsp;</p>
+    </div>
+</footer>
 
 [% INCLUDE 'include/doc-body-scripts.inc.tt2' %]
 <script type="module">
     import API from './include/js/rail/uk/tiger-api.mjs';
+    import Clock from './include/js/clock.mjs';
     import UKRail from './include/js/rail/uk/main.mjs';
 
     const api = new API({ jquery: jQuery });
     api.init();
 
-    const ukrail = new UKRail({ mode: 'arrivees', api: api, jquery: jQuery, tiplocId: '[% tiplocId %]' });
+    const clock = new Clock({ jquery: jQuery, hideSecs: [% IF (hide_secs) %]true[% ELSE %]false[% END %] });
+    clock.init();
+
+    const ukrail = new UKRail({
+        mode: 'arrivees',
+        tiplocId: '[% tiploc_id %]',
+        api: api,
+        jquery: jQuery,
+        hideCalls: [% IF (hide_calls) %]true[% ELSE %]false[% END %],
+    });
     ukrail.init();
     setInterval(
         (() => {

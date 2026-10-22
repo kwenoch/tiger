@@ -193,7 +193,7 @@ const UKRail = class {
         row.attr("data-eta", eta);
         row.attr("data-etd", etd);
         row.html(
-            '<div class=\"col opinfo\"><span class=\"oper\">&nbsp;<\/span><span class=\"headcode\">&nbsp;<\/span><\/div><div class=\"col schedinfo\"><span class=\"status\">&nbsp;<\/span><span class=\"addinfo\">&nbsp;<\/span><\/div><div class=\"col boardinfo\"><span class=\"due alert\">&nbsp;<\/span><\/div><div class=\"col destinfo originfo\"><span class=\"dest orig\">&nbsp;<\/span><\/div><div class=\"col platinfo\"><span class=\"platform\">&nbsp;<\/span><\/div><div class=\"col callsinfo\"><ul class=\"calls\"><\/ul><\/div>',
+            '<div class=\"col boardinfo\"><span class=\"due info\">&nbsp;<\/span><\/div><div class=\"col destinfo originfo\"><span class=\"dest orig\">&nbsp;<\/span><\/div><div class=\"col opinfo\"><span class=\"oper\">&nbsp;<\/span><span class=\"headcode\">&nbsp;<\/span><\/div><div class=\"col platinfo\"><span class=\"platform\">&nbsp;<\/span><\/div><div class=\"col schedinfo\"><span class=\"status\">&nbsp;<\/span><span class=\"addinfo\">&nbsp;<\/span><\/div><div class=\"col break-flex\"><\/div><div class=\"col callsinfo\"><ul class=\"calls\"><\/ul><\/div>',
         );
 
         return row;
@@ -245,7 +245,8 @@ const UKRail = class {
     };
 
     setIncidentSummary = (row, incidentSummary) => {
-        row.addClass("danger");
+        row.addClass("alert");
+        row.css("display", "block");
 
         return row.find("p").first().html(incidentSummary);
     };
@@ -321,10 +322,8 @@ const UKRail = class {
         if (STD == ETD || ETD == "On time") value = "On time";
         if (delay === "CAN") value = "Cancelled";
 
-        if (value == "Delayed")
+        if (value == "Delayed" || value == "Cancelled")
             row.find("span.status").first().addClass("alert");
-        else if (value == "Cancelled")
-            row.find("span.status").first().addClass("danger");
 
         return row.find("span.status").first().html(value);
     };

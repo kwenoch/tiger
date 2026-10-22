@@ -148,7 +148,7 @@ const Bus = class {
         row.attr("data-uid", uid);
         row.attr("data-etd", etd);
         row.html(
-            '<div class=\"col opinfo\"><span class=\"oper\">&nbsp;<\/span><\/div><div class=\"col schedinfo\"><span class=\"status\">&nbsp;<\/span><span class=\"addinfo\">&nbsp;<\/span><\/div><div class=\"col boardinfo\"><span class=\"due alert\">&nbsp;<\/span><\/div><div class=\"col destinfo originfo\"><span class=\"dest orig\">&nbsp;<\/span><\/div><div class=\"col lineinfo\"><span class=\"line\">&nbsp;<\/span><\/div><div class=\"col callsinfo\"><ul class=\"calls\"><\/ul><\/div>',
+            '<div class=\"col boardinfo\"><span class=\"due info\">&nbsp;<\/span><\/div><div class=\"col destinfo originfo\"><span class=\"dest orig\">&nbsp;<\/span><\/div><div class=\"col opinfo\"><span class=\"oper\">&nbsp;<\/span><\/div><div class=\"col lineinfo\"><span class=\"line\">&nbsp;<\/span><\/div><div class=\"col schedinfo\"><span class=\"status\">&nbsp;<\/span><span class=\"addinfo\">&nbsp;<\/span><\/div><div class=\"col callsinfo\"><ul class=\"calls\"><\/ul><\/div>',
         );
 
         return row;
@@ -244,9 +244,7 @@ const Bus = class {
 
     setStatus = (row, status = "") => {
         if (status == "En-route") {
-            row.find("span.status").first().addClass("alert");
-        } else if (status == "Scheduled") {
-            row.find("span.status").first().addClass("danger");
+            row.find("span.status").first().addClass("info");
         }
 
         return row.find("span.status").first().html(status);

@@ -1,5 +1,8 @@
+.vscode/
 local/
 node_modules/
+.vscode/
+.DS_Store
 .env
 cpanfile.snapshot
 package-lock.json

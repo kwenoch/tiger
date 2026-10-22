@@ -15,27 +15,22 @@
 //  limitations under the License.
 
 body#arrivees div#wrapper {
-    background: var(--dark-green);
+    background: var(--natural-green);
 
     div#loading {
-        background: var(--dark-green);
+        background: var(--natural-green);
     }
 
     /* main */
     main {
-        &::before {
-            background: transparent url('/res/vectors/arrivees_web.svg') no-repeat bottom center;
-            background-size: contain;
-        }
-
         div.row {
-            background: var(--dark-green);
+            background: var(--natural-green);
 
             &:nth-child(odd) {
-                background: var(--natural-green);
+                background: var(--light-green);
 
                 &.platinfo span.platform.alert {
-                    color: var(--natural-green);
+                    color: var(--light-green);
                 }
             }
 
@@ -43,7 +38,7 @@ body#arrivees div#wrapper {
                 &.platinfo {
                     span.platform {
                         &.alert {
-                            color: var(--dark-green);
+                            color: var(--natural-green);
                         }
                     }
                 }

@@ -21,9 +21,11 @@ body#arrivees div#wrapper {
     height: 100vh;
     overflow-x: hidden;
     overflow-y: scroll;
-    color: var(--white);
-    font-size: 1.50rem;
-    font-family: -apple-system, 'Segoe UI', system-ui, 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+    color: var(--black);
+    font-size: 1.5rem;
+    font-family:
+        -apple-system, "Segoe UI", system-ui, "Roboto", "Helvetica Neue",
+        "Arial", sans-serif;
     font-weight: normal;
     line-height: 1.2;
 
@@ -37,10 +39,10 @@ body#arrivees div#wrapper {
 
         span.dialogue {
             display: inline-block;
-            margin: 1.0em;
-            padding: .25em;
-            border: 0.15em solid var(--white);
-            border-radius: .33em;
+            margin: 1em;
+            padding: 0.25em;
+            border: 0.15em solid var(--black);
+            border-radius: 0.33em;
             text-align: center;
             align-content: center;
             font-weight: 600;
@@ -52,15 +54,38 @@ body#arrivees div#wrapper {
         display: flex;
         flex-direction: row;
         flex: 0 1 auto;
-        background: var(--black);
+        background: var(--white);
         justify-content: space-between;
-        padding: .33em;
-        
+        padding: 0.33em;
+
+        div#header-left {
+            display: flex;
+            flex-direction: row;
+            flex: 0 1 auto;
+            align-items: center;
+        }
+
+        img {
+            max-height: 1em;
+            padding-right: 0.66em;
+        }
+
         h1 {
-            font-size: 1.0em;
+            font-size: 1em;
             font-weight: 600;
             margin: 0;
             padding: 0;
+            color: var(--dark-blue);
+        }
+
+        div#clock {
+            min-width: 20vw;
+            text-align: end;
+            font-variant-numeric: tabular-nums;
+
+            small {
+                color: var(--alert);
+            }
         }
     }
 
@@ -73,24 +98,12 @@ body#arrivees div#wrapper {
         justify-content: start;
         overflow-x: hidden;
         overflow-y: scroll;
-        
-        &::before {
-            display: block;
-            position: absolute;
-            width: 3.5em;
-            top: .20em;
-            right: 2.0em;
-            bottom: .20em;
-            mix-blend-mode: lighten;
-            opacity: .85;
-            content: " ";
-        }
 
         div.row {
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
-            padding: .50rem;
+            padding: 0.5rem;
 
             div.col {
                 display: flex;
@@ -107,37 +120,25 @@ body#arrivees div#wrapper {
                     white-space: nowrap;
                     text-overflow: ellipsis;
 
+                    &.info {
+                        color: var(--info);
+                    }
+
                     &.alert {
                         color: var(--alert);
                     }
-                    
-                    &.danger {
-                        color: var(--danger);
-                    }
                 }
 
-                &.opinfo {
-                    width: calc(2.0em - .50rem);
-                    
-                    span.oper,
-                    span.headcode {
-                        font-size: .50em;
-                    }
-                }
-
-                &.schedinfo {
-                    width: 3.25em;
-                    
-                    span.status,
-                    span.addinfo {
-                        font-size: .50em;
-                    }
+                &.break-flex {
+                    flex-basis: 100%;
+                    height: 0;
                 }
 
                 &.boardinfo {
-                    width: 4.0em;
-                    
+                    width: 3.75em;
+
                     span.due {
+                        font-variant-numeric: tabular-nums;
                         font-weight: 600;
                     }
                 }
@@ -145,7 +146,6 @@ body#arrivees div#wrapper {
                 &.destinfo,
                 &.originfo {
                     width: auto;
-                    max-width: calc(100vw - 11.5em);
                     flex-grow: 1;
 
                     span.dest,
@@ -156,26 +156,34 @@ body#arrivees div#wrapper {
                     }
                 }
 
+                &.opinfo {
+                    width: 1.5em;
+
+                    span.oper,
+                    span.headcode {
+                        font-size: 0.5em;
+                    }
+                }
+
                 &.platinfo,
                 &.lineinfo {
-                    width: auto;
-                    flex-direction: unset;
-                    justify-content: end;
+                    width: 2em;
+                    align-items: center;
 
                     span.platform,
                     span.line {
                         display: block;
-                        width: 2.0em;
-                        height: 2.0em;
-                        border: 0.15em solid var(--white);
-                        border-radius: .33em;
+                        width: 2em;
+                        height: 2em;
+                        border: 0.15em solid var(--black);
+                        border-radius: 0.33em;
                         text-align: center;
                         align-content: center;
-                        font-size: .60em;
+                        font-size: 0.6em;
                         font-weight: 600;
                         font-variant-numeric: tabular-nums;
-                        line-height: 1.0;
-                        
+                        line-height: 1;
+
                         &.alert {
                             background: var(--alert);
                             border: 0.15em solid var(--alert);
@@ -183,26 +191,36 @@ body#arrivees div#wrapper {
                     }
                 }
 
+                &.schedinfo {
+                    width: 3em;
+
+                    span.status,
+                    span.addinfo {
+                        font-variant-numeric: tabular-nums;
+                        font-size: 0.5em;
+                    }
+                }
+
                 &.callsinfo {
-                    display: block;
-                    margin: 0.15em 1.50em 0 calc(9.5em - .50rem);
-                    width: calc(100vw - 11.5em);
+                    width: auto;
+                    flex-grow: 1;
 
                     ul.calls {
                         display: block;
+                        width: 100vw;
                         margin: 0;
                         padding: 0;
-                        font-size: .75em;
+                        font-size: 0.75em;
                         white-space: nowrap;
 
                         li {
                             display: inline;
 
                             &::before {
-                                color: var(--alert);
+                                color: var(--info);
                                 content: " \2022   ";
-                                font-size: 1.0em;
-                                line-height: 1.0;
+                                font-size: 1em;
+                                line-height: 1;
                             }
 
                             &:nth-child(1)::before {
@@ -211,8 +229,8 @@ body#arrivees div#wrapper {
                         }
 
                         &.animated {
-                            animation-duration: 30s;
-                            animation-iteration-count: infinite;
+                            animation-duration: 40s;
+                            animation-iteration-count: 1;
                             animation-name: marquee;
                             animation-timing-function: linear;
                             overflow: visible;
@@ -229,54 +247,28 @@ body#arrivees div#wrapper {
 
     /* footer */
     footer {
-        display: flex;
+        display: none;
         flex-direction: row;
         flex: 0 1 auto;
         justify-content: space-between;
-        padding: .33em .33em 0 .33em;
+        padding: 0.33em;
 
         div#incident {
             p {
                 padding: 0;
                 margin: 0;
                 max-width: 66vw;
-                font-size: .50em;
+                color: var(--white);
+                font-size: 0.5em;
             }
+        }
+
+        &.info {
+            background: var(--info);
         }
 
         &.alert {
             background: var(--alert);
-
-            div#incident {
-                p {
-                    color: var(--black);
-                }
-            }
-        }
-
-        &.danger {
-            background: var(--danger);
-
-            div#incident {
-                p {
-                    color: var(--black);
-                }
-            }
-        }
-        
-        div#clock {
-            display: block;
-            padding: .15em .33em;
-            border: 0.15em solid var(--white);
-            border-bottom: 0;
-            border-top-left-radius: .33em;
-            border-top-right-radius: .33em;
-            text-align: center;
-            font-variant-numeric: tabular-nums;
-            
-            small {
-                color: var(--danger);
-            }
         }
     }
 
@@ -284,7 +276,8 @@ body#arrivees div#wrapper {
     @keyframes marquee {
         from {
             transform: translateX(100%);
-        } to {
+        }
+        to {
             transform: translateX(-500%);
         }
     }
@@ -294,19 +287,48 @@ body#arrivees div#wrapper {
 @media (min-width: 576px) {
     body#departs div#wrapper,
     body#arrivees div#wrapper {
-        font-size: 2.50rem;
+        font-size: 2.5rem;
+    }
+}
 
-        /* main */
+/* for dark mode */
+@media (prefers-color-scheme: dark) {
+    body#departs div#wrapper,
+    body#arrivees div#wrapper {
+        color: var(--white);
+
+        div#loading {
+            span.dialogue {
+                border-color: var(--white);
+            }
+        }
+
+        header {
+            background: var(--black);
+
+            h1 {
+                color: var(--white);
+            }
+        }
+
         main {
             div.row {
                 div.col {
-                    &.opinfo {
-                        width: calc(2.50em - .50rem);
+                    &.platinfo,
+                    &.lineinfo {
+                        span.platform,
+                        span.line {
+                            border-color: var(--white);
+                        }
                     }
 
-                    &.callsinfo {
-                        margin: 0.15em 2.0em 0 calc(9.75em - .50rem);
-                        width: calc(100vw - 12.0em);
+                    &.opinfo {
+                        span.oper,
+                        span.headcode {
+                            img {
+                                filter: invert(100%);
+                            }
+                        }
                     }
                 }
             }

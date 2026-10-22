@@ -15,28 +15,23 @@
 //  limitations under the License.
 
 body#departs div#wrapper {
-    background: var(--dark-blue);
+    background: var(--natural-blue);
 
     div#loading {
-        background: var(--dark-blue);
+        background: var(--natural-blue);
     }
 
     /* main */
     main {
-        &::before {
-            background: transparent url('/res/vectors/departs_web.svg') no-repeat bottom center;
-            background-size: contain;
-        }
-
         div.row {
-            background: var(--dark-blue);
+            background: var(--natural-blue);
 
             &:nth-child(odd) {
-                background: var(--natural-blue);
+                background: var(--light-blue);
 
                 &.platinfo span.platform.alert,
                 &.lineinfo span.line.alert {
-                    color: var(--natural-blue);
+                    color: var(--light-blue);
                 }
             }
 
@@ -46,7 +41,7 @@ body#departs div#wrapper {
                     span.platform,
                     span.line {
                         &.alert {
-                            color: var(--dark-blue);
+                            color: var(--natural-blue);
                         }
                     }
                 }
@@ -56,10 +51,10 @@ body#departs div#wrapper {
 
     /* footer */
     footer {
-        background: var(--dark-blue);
+        background: var(--natural-blue);
 
         div#clock {
-            background: var(--dark-blue);
+            background: var(--natural-blue);
         }
     }
 }

@@ -17,7 +17,14 @@
 </div>
 
 <header>
-    <h1>&nbsp;</h1>
+    <div id="header-left">
+        <img alt="Plymouth City Council" src="./res/vectors/pcc.svg" />
+        <h1>&nbsp;</h1>
+    </div>
+    <div id="clock">
+        <span>00 00</span>
+        <small>00</small>
+    </div>
 </header>
 
 <main></main>
@@ -25,10 +32,6 @@
 <footer>
     <div id="incident">
         <p>&nbsp;</p>
-    </div>
-    <div id="clock">
-        <span>00 00</span>
-        <small>00</small>
     </div>
 </footer>
 
