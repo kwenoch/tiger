@@ -79,7 +79,7 @@ body#arrivees div#wrapper {
         }
 
         div#clock {
-            min-width: 20vw;
+            min-width: 4em;
             text-align: end;
             font-variant-numeric: tabular-nums;
 
@@ -135,7 +135,7 @@ body#arrivees div#wrapper {
                 }
 
                 &.boardinfo {
-                    width: 3.75em;
+                    width: calc(4em - 0.5rem);
 
                     span.due {
                         font-variant-numeric: tabular-nums;
@@ -145,7 +145,7 @@ body#arrivees div#wrapper {
 
                 &.destinfo,
                 &.originfo {
-                    width: auto;
+                    width: calc(100vw - calc(11.75em - 1rem));
                     flex-grow: 1;
 
                     span.dest,
@@ -167,7 +167,7 @@ body#arrivees div#wrapper {
 
                 &.platinfo,
                 &.lineinfo {
-                    width: 2em;
+                    width: 2.25em;
                     align-items: center;
 
                     span.platform,
@@ -192,7 +192,7 @@ body#arrivees div#wrapper {
                 }
 
                 &.schedinfo {
-                    width: 3em;
+                    width: calc(3.33em - 0.5rem);
 
                     span.status,
                     span.addinfo {
@@ -284,7 +284,7 @@ body#arrivees div#wrapper {
 }
 
 /* for desktop */
-@media (min-width: 576px) {
+@media (min-width: 992px) {
     body#departs div#wrapper,
     body#arrivees div#wrapper {
         font-size: 2.5rem;
