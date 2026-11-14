@@ -18,9 +18,8 @@ package Tiger::API::Rail::UK::Locations;
 use strict;
 use warnings;
 
-use HTTP::Request;
+use File::Basename qw( dirname );
 use JSON;
-use LWP::UserAgent;
 use Mojo::Base 'Mojolicious::Controller', -signatures;
 
 use Tiger::Env::Config;
@@ -29,21 +28,16 @@ sub list {
     my ($app)        = @_;
     my ($controller) = $app->openapi->valid_input or return;
 
-    my $config  = Tiger::Env::Config->new;
-    my $baseurl = $config->{rail}->{api}->{upstream_api_url};
-
-    my $request = HTTP::Request->new( 'GET', $baseurl . '/locations' );
-    my $ua      = LWP::UserAgent->new;
-
-    $request->header( 'User-Agent'                                  => 'perl/"$^V' );
-    $request->header( 'Content-Type'                                => 'application/json' );
-    $request->header( $config->{rail}->{api}->{upstream_api_header} => $config->{rail}->{api}->{upstream_api_key} );
-
-    my $response = $ua->request($request);
-    my $content  = JSON->new->decode( $response->{_content} );
+    my $filename = dirname( __FILE__ ) . "/Locations.json";
+    my $file = do {
+        local $/ = undef;
+        open my $fh, "<", $filename
+            or die "ERROR:\tcould not open $filename: $!";
+        <$fh>;
+    };
 
     return $controller->render(
-        openapi => $content,
+        openapi => JSON->new->decode( $file ),
     );
 }
 

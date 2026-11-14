@@ -28,8 +28,8 @@ const Locations = class {
                 this.resetDOM();
 
                 this.locations.forEach((location, idx) => {
-                    let tiploc = location.TIPLOC;
-                    let name = location.Name;
+                    let tiploc = location.tiploc;
+                    let name = location.name;
                     let dom = this.loadDOM(tiploc, name);
 
                     this.setStation(dom, name);

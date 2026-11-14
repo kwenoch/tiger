@@ -31,11 +31,27 @@ body#arrivees.greyscale div#wrapper {
     }
 
     header {
-        background: var(--white);
+        background: var(--white)
+            repeating-linear-gradient(
+                45deg,
+                var(--grey),
+                var(--grey) 3px,
+                3px,
+                var(--lightgrey) 6px
+            );
+        background-size: cover;
         color: var(--black);
 
         h1 {
             color: var(--black);
+        }
+
+        div#clock {
+            font-weight: 600;
+
+            small {
+                color: var(--black);
+            }
         }
     }
 
@@ -62,6 +78,10 @@ body#arrivees.greyscale div#wrapper {
                 &.schedinfo span.status,
                 &.schedinfo span.addinfo {
                     color: var(--black);
+
+                    &.alert {
+                        font-weight: 600;
+                    }
                 }
 
                 &.callsinfo ul.calls {
@@ -87,6 +107,7 @@ body#arrivees.greyscale div#wrapper {
                                 var(--lightgrey) 6px
                             );
                         background-size: cover;
+                        font-weight: 600;
                     }
                 }
             }
@@ -97,13 +118,24 @@ body#arrivees.greyscale div#wrapper {
         background: var(--white);
         color: var(--black);
 
-        div#clock {
-            background: var(--white);
-            border-color: var(--black);
-
-            small {
-                color: var(--darkgrey);
+        div#incident {
+            p {
+                color: var(--black);
             }
+        }
+
+        &.info,
+        &.alert {
+            background: var(--white)
+                repeating-linear-gradient(
+                    45deg,
+                    transparent,
+                    transparent 3px,
+                    3px,
+                    var(--lightgrey) 6px
+                );
+            background-size: cover;
+            font-weight: 600;
         }
     }
 }

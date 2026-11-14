@@ -15,7 +15,7 @@
 //  limitations under the License.
 
 const UKRail = class {
-    constructor(config) {
+    constructor(config = Object()) {
         this.mode = config.mode;
         this.tiplocId = config.tiplocId;
         this.api = config.api;
@@ -23,33 +23,23 @@ const UKRail = class {
 
         this.hideCalls = config.hideCalls || false;
 
-        if (this.mode == undefined)
-            return this.throwError(
+        if (this.mode == undefined) {
+            return this._throwError(
                 "no_mode",
-                "No mode was specified for this object.",
+                "No mode was specified for this class"
             );
+        }
     }
 
     init = () => {
-        this.api
-            .getLocations()
-            .done((data) => {
-                this.locations = data;
-                this.errors = data.errors;
-            })
-            .then(() => {
-                this.location = this.locations.find((location) => {
-                    return location.TIPLOC == this.tiplocId;
-                });
-
-                this.setTitle(this.location.Name || this.location.TIPLOC || "");
-            });
-
         this.build()
+            .then(() => {
+                this.setTitle(this.name || this.tiplocId || "");
+            })
             .then(() => {
                 this.jQuery("div#loading").remove();
             })
-            .catch((error) => {
+            .catch(error => {
                 console.error(error);
             });
 
@@ -57,83 +47,86 @@ const UKRail = class {
     };
 
     build = async () => {
-        return this.api
-            .getServices(this.tiplocId)
-            .done((data) => {
-                this.detail = data.detail;
-                this.incidentSummary = data.incidentSummary;
-                this.services = data.services;
-                this.specialNotice = data.specialNotice;
-                this.errors = data.errors;
-            })
+        return this.fetchServices()
             .then(() => {
-                let dom = this.createDOM();
+                return this.createDOM();
+            })
+            .then(dom => {
+                if (this.error) {
+                    return this._throwError(this.error.code, this.error.error);
+                }
 
-                if (this.detail)
-                    if (
-                        this.detail.includes("Location with TIPLOC") &&
-                        this.detail.includes("not found")
-                    ) {
-                        return this.throwError("no_tiploc", this.detail);
-                    }
-
-                if (this.services == undefined || this.services.length < 1)
-                    return this.throwError(
-                        "no_data",
-                        "There is currently no train information available.",
+                if (this.services == undefined || this.services.length < 1) {
+                    return this._throwError(
+                        "NoData",
+                        "There is currently no train information available."
                     );
+                }
 
-                if (this.specialNotice != "")
-                    this.setSpecialNotice(
-                        this.jQuery("footer"),
-                        this.specialNotice,
-                    );
-
-                if (this.incidentSummary != "")
+                if (this.incidentSummary != "") {
                     this.setIncidentSummary(
                         this.jQuery("footer"),
                         this.incidentSummary,
+                        true
                     );
+                } else if (this.specialNotice != "") {
+                    this.setSpecialNotice(
+                        this.jQuery("footer"),
+                        this.specialNotice,
+                        true
+                    );
+                } else {
+                    this.setIncidentSummary(this.jQuery("footer"), "", false);
+                    this.setSpecialNotice(this.jQuery("footer"), "", false);
+                }
 
                 this.services.forEach((service, idx) => {
-                    if (this.mode == "departs" && service.STD == "") return;
-
-                    if (this.mode == "arrivees" && service.STA == "") return;
+                    if (this.mode == "departs" && service.STD == "") {
+                        return;
+                    }
+                    if (this.mode == "arrivees" && service.STA == "") {
+                        return;
+                    }
 
                     let uid = service.UID;
                     let row = this.createRow(uid, service.ETA, service.ETD);
 
                     this.setOper(row, service.ATOCCode);
                     this.setHeadCode(row, service.Headcode);
+                    this.setPlatform(
+                        row,
+                        service.Platform,
+                        service.PlatformChanged
+                    );
                     this.setStatus(
                         row,
                         service.STD,
                         service.ETD,
-                        service.Delay,
+                        service.Delay
                     );
                     this.setAddInfo(
                         row,
                         service.STD,
                         service.ETD,
-                        service.Delay,
+                        service.Delay
                     );
-                    this.setPlatform(
+                    this.setCoaches(
                         row,
-                        service.Platform,
-                        service.PlatformChanged,
+                        service.Destinations?.Front?.Coaches || null
                     );
 
                     if (this.mode == "departs") {
                         this.setTime(row, service.STD);
                         this.setDest(row, service.Destinations.Front.Name);
 
-                        if (idx < 2 && !this.hideCalls && service.CallingPoints)
-                            this.setCalls(
-                                row,
-                                service.CallingPoints.Front,
-                            );
+                        if (
+                            idx < 2 &&
+                            !this.hideCalls &&
+                            service.CallingPoints
+                        ) {
+                            this.setCalls(row, service.CallingPoints.Front);
+                        }
                     }
-
                     if (this.mode == "arrivees") {
                         this.setTime(row, service.STA);
                         this.setOrig(row, service.Origins.Front.Name);
@@ -144,45 +137,51 @@ const UKRail = class {
 
                 this.commitDOM(dom);
             })
-            .fail((error) => {
-                console.error(error);
+            .catch(error => {
+                return this._throwError(error);
             });
-    };
-
-    throwError = (code, message) => {
-        let dom = this.createDOM();
-        let row = this.createRow("", "");
-
-        this.setPlatform(row, "", false);
-        this.setCalls(row, [{ Name: message }]);
-
-        dom.append(row);
-        this.commitDOM(dom);
-
-        return {
-            error: {
-                code: code,
-                message: message,
-            },
-        };
     };
 
     fetchServices = async () => {
         return this.api
-            .getServices()
-            .done((data) => {
-                this.services = data.services || undefined;
+            .getServices(this.tiplocId)
+            .done(data => {
+                if (data.detail && data.name) {
+                    return (this.error = {
+                        code: data.name,
+                        error: data.detail,
+                    });
+                }
+
+                this.crs = data.CRS;
+                this.incidentSummary = data.incidentSummary;
+                this.name = data.Name;
+                this.services = data.services;
+                this.specialNotice = data.specialNotice;
+                this.specialNoticeType = data.specialNoticeType;
             })
-            .fail((error) => {
-                console.error(error);
+            .fail(error => {
+                return this._throwError(error);
             });
     };
 
     checkRefresh = () => {
         const date = new Date();
 
-        if (date.getSeconds() === 0) return true;
-        return false;
+        if (date.getSeconds() === 0) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+
+    commitDOM = dom => {
+        this.jQuery("main").remove();
+        return this.jQuery("#wrapper").find("header").first().after(dom);
+    };
+
+    createDOM = () => {
+        return this.jQuery("<main>");
     };
 
     createRow = (uid, eta, etd) => {
@@ -193,30 +192,30 @@ const UKRail = class {
         row.attr("data-eta", eta);
         row.attr("data-etd", etd);
         row.html(
-            '<div class=\"col boardinfo\"><span class=\"due info\">&nbsp;<\/span><\/div><div class=\"col destinfo originfo\"><span class=\"dest orig\">&nbsp;<\/span><\/div><div class=\"col opinfo\"><span class=\"oper\">&nbsp;<\/span><span class=\"headcode\">&nbsp;<\/span><\/div><div class=\"col platinfo\"><span class=\"platform\">&nbsp;<\/span><\/div><div class=\"col schedinfo\"><span class=\"status\">&nbsp;<\/span><span class=\"addinfo\">&nbsp;<\/span><\/div><div class=\"col break-flex\"><\/div><div class=\"col callsinfo\"><ul class=\"calls\"><\/ul><\/div>',
+            '<div class=\"col boardinfo\"><span class=\"due info\">&nbsp;<\/span><\/div><div class=\"col destinfo originfo\"><span class=\"dest orig\">&nbsp;<\/span><\/div><div class=\"col opinfo\"><span class=\"oper\">&nbsp;<\/span><span class=\"headcode\">&nbsp;<\/span><\/div><div class=\"col platinfo\"><span class=\"platform\">&nbsp;<\/span><\/div><div class=\"col schedinfo\"><span class=\"status\">&nbsp;<\/span><span class=\"addinfo\"><\/span><span class=\"coaches\"><\/span><\/div><div class=\"col break-flex\"><\/div><div class=\"col callsinfo\"><ul class=\"calls\"><\/ul><\/div>'
         );
 
         return row;
     };
 
-    createDOM = () => {
-        return this.jQuery("<main>");
-    };
-
-    commitDOM = (dom) => {
-        this.jQuery("main").remove();
-        return this.jQuery("#wrapper").find("header").first().after(dom);
-    };
-
     setAddInfo = (row, STD = "", ETD = "", delay = "") => {
-        let value = "Delayed";
+        let value;
         delay = Number(delay.replace("+", ""));
 
-        if (STD == ETD || ETD == "On time") value = "On time";
-        if (delay === "CAN") value = "Cancelled";
+        if (ETD == "On time" || STD == ETD) {
+            value = "On time";
+        } else if (delay === "CAN") {
+            value = "Cancelled";
+        } else {
+            value = "Delayed";
+        }
 
-        if (value == "On time") return;
-        if (isNaN(delay)) return;
+        if (value == "On time") {
+            return;
+        }
+        if (isNaN(delay)) {
+            return;
+        }
 
         return row
             .find("span.addinfo")
@@ -226,15 +225,26 @@ const UKRail = class {
     };
 
     setCalls = (row, callingPoints = []) => {
-        callingPoints.forEach((callingPoint) => {
+        callingPoints.forEach(callingPoint => {
             row.find("ul.calls")
                 .first()
                 .append("<li>" + callingPoint.Name + "</li>")
-                .addClass("animated");;
+                .addClass("animated");
         });
 
         return row.find("ul.calls").first();
     };
+
+    setCoaches = (row, coaches = null) => {
+        if (coaches == null || isNaN(coaches)) {
+            return;
+        }
+
+        return row
+            .find("span.coaches")
+            .first()
+            .html(coaches + " coaches");
+    }
 
     setDest = (row, dest) => {
         return row.find("span.dest").first().html(dest);
@@ -244,15 +254,21 @@ const UKRail = class {
         return row.find("span.headcode").first().html(headcode);
     };
 
-    setIncidentSummary = (row, incidentSummary) => {
-        row.addClass("alert");
-        row.css("display", "block");
+    setIncidentSummary = (row, incidentSummary = "", isActive = false) => {
+        if (isActive) {
+            row.addClass("alert");
+            row.css("display", "block");
+        } else {
+            row.removeClass("alert");
+            row.css("display", "none");
+        }
 
         return row.find("p").first().html(incidentSummary);
     };
 
     setOper = (row, oper = "GB") => {
         let tocMap = {
+            AW: "TfW",
             EM: "EMR",
             GB: "GBR",
             GC: "GC",
@@ -281,15 +297,22 @@ const UKRail = class {
         oper = tocMap[oper] || oper;
 
         // special logo'd operators
-        if (oper == "GWR")
+        if (oper == "GWR") {
             oper =
-                '<img src=\"\/res\/vectors\/gwr.svg\" style=\"width:2.25em\" alt=\"GWR\" \/>';
-        if (oper == "SR")
+                '<img src=\"\/res\/vectors\/rail\/gwr.svg\" style=\"width:2.25em\" alt=\"GWR\" \/>';
+        }
+        if (oper == "SR") {
             oper =
-                '<img src=\"\/res\/vectors\/scot.svg\" style=\"width:2.25em\" alt=\"ScotRail\" \/>';
-        if (oper == "TfL")
+                '<img src=\"\/res\/vectors\/rail\/scot.svg\" style=\"width:2.25em\" alt=\"ScotRail\" \/>';
+        }
+        if (oper == "TfL") {
             oper =
-                '<img src=\"\/res\/vectors\/tfl.svg\" style=\"width:2.25em\" alt=\"TfL\" \/>';
+                '<img src=\"\/res\/vectors\/rail\/tfl.svg\" style=\"width:2.25em\" alt=\"TfL\" \/>';
+        }
+        if (oper == "TfW") {
+            oper =
+                '<img src=\"\/res\/vectors\/rail\/tfw.svg\" style=\"width:2.25em\" alt=\"TfW\" \/>';
+        }
 
         return row.find("span.oper").first().html(oper);
     };
@@ -299,9 +322,9 @@ const UKRail = class {
     };
 
     setPlatform = (row, platform = "", platformChanged = false) => {
-        if (platformChanged)
+        if (platformChanged) {
             row.find("span.platform").first().addClass("alert");
-
+        }
         if (platform == "") {
             row.find("span.platform").first().remove();
             return undefined;
@@ -310,20 +333,33 @@ const UKRail = class {
         return row.find("span.platform").first().html(platform);
     };
 
-    setSpecialNotice = (row, specialNotice) => {
-        row.addClass("alert");
+    setSpecialNotice = (row, specialNotice = "", isActive = false) => {
+        if (isActive) {
+            row.addClass("alert");
+            row.css("display", "block");
+        } else {
+            row.removeClass("alert");
+            row.css("display", "none");
+        }
 
         return row.find("p").first().html(specialNotice);
     };
 
     setStatus = (row, STD = "", ETD = "", delay = "") => {
-        let value = "Delayed";
+        let value;
 
-        if (STD == ETD || ETD == "On time") value = "On time";
-        if (delay === "CAN") value = "Cancelled";
+        if (ETD == "On time" || STD == ETD) {
+            value = "On time";
+        } else if (delay === "CAN") {
+            value = "Cancelled";
+            row.find("span.coaches").first().css("display", "none");
+        } else {
+            value = "Delayed";
+        }
 
-        if (value == "Delayed" || value == "Cancelled")
+        if (value == "Delayed" || value == "Cancelled") {
             row.find("span.status").first().addClass("alert");
+        }
 
         return row.find("span.status").first().html(value);
     };
@@ -332,21 +368,41 @@ const UKRail = class {
         return row.find("span.due").first().html(time.replace(":", "h"));
     };
 
-    setTitle = (station = "") => {
+    setTitle = (name = "") => {
         let title;
 
-        if (this.mode == "departs") title = "Departures from " + station;
-        else if (this.mode == "arrivees") title = "Arrivals at " + station;
+        if (this.mode == "departs") {
+            title = "Departures from " + name;
+        } else if (this.mode == "arrivees") {
+            title = "Arrivals at " + name;
+        }
 
         this.jQuery("title").text(title);
-
         return this.jQuery("header h1").first().html(title);
     };
 
-    format = (input) => {
-        if (input < 10) input = "0" + input;
+    _throwError = (code, error) => {
+        let dom = this.createDOM();
+        let row = this.createRow("", "");
 
-        return input;
+        this.setPlatform(row, "", false);
+        this.setCalls(row, [{ Name: error }]);
+
+        dom.append(row);
+        this.commitDOM(dom);
+
+        return console.error({
+            code: code,
+            error: error,
+        });
+    };
+
+    _toTitleCase = input => {
+        return input.replace(
+            /\w\S*/g,
+            text =>
+                text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
+        );
     };
 };
 

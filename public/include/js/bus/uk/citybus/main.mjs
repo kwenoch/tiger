@@ -204,19 +204,19 @@ const Bus = class {
         // special logo'd operators
         if (oper == "First")
             oper =
-                '<img src=\"\/res\/vectors\/firstbus.svg\" style=\"width:2.25em\" alt=\"First Bus\" \/>';
+                '<img src=\"\/res\/vectors\/bus\/firstbus.svg\" style=\"width:2.25em\" alt=\"First Bus\" \/>';
         if (oper == "West" || oper == "BristolMetrobus")
             oper =
-                '<img src=\"\/res\/vectors\/westbus.svg\" style=\"width:2.25em\" alt=\"WEST Bus\" \/>';
+                '<img src=\"\/res\/vectors\/bus\/westbus.svg\" style=\"width:2.25em\" alt=\"WEST Bus\" \/>';
         if (oper == "PlymouthCitybus")
             oper =
-                '<img src=\"\/res\/vectors\/plymouthcitybus.svg\" style=\"width:2.25em\" alt=\"Plymouth CityBus\" \/>';
+                '<img src=\"\/res\/vectors\/bus\/plymouthcitybus.svg\" style=\"width:2.25em\" alt=\"Plymouth CityBus\" \/>';
         if (oper == "TransportCornwall")
             oper =
-                '<img src=\"\/res\/vectors\/transportcornwall.svg\" style=\"width:2.25em\" alt=\"Karyans rag Kernow\" \/>';
+                '<img src=\"\/res\/vectors\/bus\/transportcornwall.svg\" style=\"width:2.25em\" alt=\"Karyans rag Kernow\" \/>';
         if (oper == "Stagecoach")
             oper =
-                '<img src=\"\/res\/vectors\/stagecoach.svg\" style=\"width:2.25em\" alt=\"Stagecoach\" \/>';
+                '<img src=\"\/res\/vectors\/bus\/stagecoach.svg\" style=\"width:2.25em\" alt=\"Stagecoach\" \/>';
 
         return row.find("span.oper").first().html(oper);
     };

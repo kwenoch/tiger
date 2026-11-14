@@ -19,8 +19,7 @@ body#arrivees div#wrapper {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    overflow-x: hidden;
-    overflow-y: scroll;
+    overflow: hidden;
     color: var(--black);
     font-size: 1.5rem;
     font-family:
@@ -96,8 +95,7 @@ body#arrivees div#wrapper {
         flex-direction: column;
         flex: 1 1 auto;
         justify-content: start;
-        overflow-x: hidden;
-        overflow-y: scroll;
+        overflow: hidden;
 
         div.row {
             display: flex;
@@ -110,7 +108,6 @@ body#arrivees div#wrapper {
                 flex: 0 0 auto;
                 flex-direction: column;
                 overflow-x: hidden;
-                overflow-y: scroll;
                 justify-items: center;
                 justify-content: start;
 
@@ -145,7 +142,7 @@ body#arrivees div#wrapper {
 
                 &.destinfo,
                 &.originfo {
-                    width: calc(100vw - calc(11.75em - 1rem));
+                    width: calc(100vw - calc(14em - calc(0.5rem + 0.5rem)));
                     flex-grow: 1;
 
                     span.dest,
@@ -194,10 +191,15 @@ body#arrivees div#wrapper {
                 &.schedinfo {
                     width: calc(3.33em - 0.5rem);
 
-                    span.status,
-                    span.addinfo {
+                    span.status {
                         font-variant-numeric: tabular-nums;
                         font-size: 0.5em;
+                    }
+                    span.coaches,
+                    span.addinfo {
+                        font-variant-numeric: tabular-nums;
+                        font-size: 0.35em;
+                        font-weight: 500;
                     }
                 }
 
@@ -257,7 +259,7 @@ body#arrivees div#wrapper {
             p {
                 padding: 0;
                 margin: 0;
-                max-width: 66vw;
+                max-width: 90vw;
                 color: var(--white);
                 font-size: 0.5em;
             }
@@ -284,10 +286,18 @@ body#arrivees div#wrapper {
 }
 
 /* for desktop */
-@media (min-width: 992px) {
+@media (min-width: 576px) {
     body#departs div#wrapper,
     body#arrivees div#wrapper {
         font-size: 2.5rem;
+
+        footer {
+            div#incident {
+                p {
+                    font-size: 0.5em;
+                }
+            }
+        }
     }
 }
 
