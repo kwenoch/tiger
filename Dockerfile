@@ -1,6 +1,6 @@
 FROM tiger AS initial
 
-FROM ubuntu:noble
+FROM ubuntu:resolute
 
 COPY script/devel/payload.tgz /tmp
 

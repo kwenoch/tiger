@@ -82,7 +82,7 @@ tar --exclude=./.git \
 | \
 gzip -9 >"${SCRIPT_DIR}/payload.tgz" || bail
 
-DIST=noble
+DIST=resolute
 TAG="${DOCKER_REGISTRY}/${DOCKER_USERNAME}/${DOCKER_PROJECT}:${DIST}"
 PLATFORM="linux/amd64,linux/arm64"
 
